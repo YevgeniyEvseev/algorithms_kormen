@@ -118,17 +118,20 @@ void drop(tree_d **root, int data) {
     free(p_key);
   }
 }
-void print_hightless_req(tree_d *root) {
+void print_hightless_req(tree_d *root, int *array) {
   tree_d *tmp = root;
+  static int i = 0;
   if (tmp == NULL) return;
-  print_hightless_req(tmp->left);
-  printf("%d ", tmp->data);
-  print_hightless_req(tmp->right);
+  print_hightless_req(tmp->left, array);
+  // printf("n%d %d\n", i++, tmp->data);
+  array[i++] = tmp->data;
+  print_hightless_req(tmp->right, array);
 }
 
-void print_hightless(tree_d *root) {
+void print_hightless(tree_d *root, int *array) {
   tree_d *r_tmp = NULL;
   tree_d *p_tmp = root;
+  int i = 0;
   do {
     if (p_tmp->left != NULL && p_tmp->left != r_tmp &&
         p_tmp->right != r_tmp)  // left branching
@@ -136,8 +139,10 @@ void print_hightless(tree_d *root) {
         p_tmp = p_tmp->left;
       }
     if (p_tmp->right != r_tmp ||
-        (p_tmp->left == NULL && p_tmp->right == NULL))  // right branch
-      printf("%d ", p_tmp->data);
+        (p_tmp->left == NULL && p_tmp->right == NULL)) {  // right branch
+      // printf("%d ", p_tmp->data);
+      array[i++] = p_tmp->data;
+    }
     if (p_tmp->right != NULL && p_tmp->right != r_tmp) {
       r_tmp = p_tmp;
       p_tmp = p_tmp->right;
@@ -147,7 +152,7 @@ void print_hightless(tree_d *root) {
     p_tmp = p_tmp->parent;
 
   } while (p_tmp != NULL);
-  printf("\n");
+  // printf("\n");
 }
 
 // return ptr if equil key. return NULL if key is not find
