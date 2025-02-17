@@ -3,6 +3,7 @@
 #include "tree_d.h"
 
 int main() {
+#if 0
   int tmp[17] = {34, 12, 4, 56, 2, 22, 23, -9, 0, 4, 1, 8, 45, 41, -21, 44, 75};
   int array[20] = {0};
   tree_d *root;
@@ -32,4 +33,9 @@ int main() {
   }
 
   clear(root);
+#endif
+
+  tree_d *root = NULL;
+
+  drop(&root, root->data);
 }

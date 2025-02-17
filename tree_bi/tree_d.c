@@ -48,34 +48,45 @@ void drop(tree_d **root, int data) {
   if (p_key == NULL) return;
   // if (p_key->parent == NULL) free(root);
   if (p_key->left == NULL && p_key->right == NULL) {
-    if (p_key == p_tmp->parent->left) {
-      p_tmp->parent->left = NULL;
-    } else {
-      p_tmp->parent->right = NULL;
+    if (p_key->parent != NULL) {
+      if (p_key == p_tmp->parent->left) {
+        p_tmp->parent->left = NULL;
+      } else {
+        p_tmp->parent->right = NULL;
+      }
     }
     free(p_key);
+    if (p_key == *root) *root = NULL;
     return;
   }
   if (p_key->left == NULL && p_key->right != NULL) {
     p_tmp = p_tmp->parent;
-    if (p_tmp->right == p_key) {
-      p_tmp->right = p_key->right;
-      p_tmp->right->parent = p_tmp;
+    if (p_key == *root) {
+      *root = p_key->right;
     } else {
-      p_tmp->left = p_key->right;
-      p_tmp->left->parent = p_tmp;
+      if (p_tmp->right == p_key) {
+        p_tmp->right = p_key->right;
+        p_tmp->right->parent = p_tmp;
+      } else {
+        p_tmp->left = p_key->right;
+        p_tmp->left->parent = p_tmp;
+      }
     }
     free(p_key);
     return;
   }
   if (p_key->right == NULL && p_key->left != NULL) {
     p_tmp = p_tmp->parent;
-    if (p_tmp->left == p_key) {
-      p_tmp->left = p_key->left;
-      p_tmp->left->parent = p_tmp;
+    if (p_key == *root) {
+      *root = p_key->left;
     } else {
-      p_tmp->right = p_key->left;
-      p_tmp->right->parent = p_tmp;
+      if (p_tmp->left == p_key) {
+        p_tmp->left = p_key->left;
+        p_tmp->left->parent = p_tmp;
+      } else {
+        p_tmp->right = p_key->left;
+        p_tmp->right->parent = p_tmp;
+      }
     }
     free(p_key);
     return;
