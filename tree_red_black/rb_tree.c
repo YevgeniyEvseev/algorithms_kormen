@@ -4,7 +4,7 @@
 
 void new_tree(Tree_rb_t **root, int data) {
   Tree_rb_t *tmp = malloc(sizeof(Tree_rb_t));
-  tmp->parant = NULL;
+  tmp->parent = NULL;
   tmp->left = NULL;
   tmp->right = NULL;
   tmp->key = data;
@@ -24,24 +24,94 @@ Tree_rb_t *search_d(Tree_rb_t *root, int data) {
   return root;
 }
 
-void rotate_right(Tree_rb_t *root, int data) {}
-void rotate_left(Tree_rb_t *root, int data) {
-  Tree_rb_t *centr = search_d(root, data);
+void rotate_right(Tree_rb_t *root, Tree_rb_t *data) {
+  Tree_rb_t *centr = data;
+  Tree_rb_t *rad = centr->parent;
+  if (rad == NULL) return;
+  rad->left = centr->right;
+  if (rad->left != NULL) rad->left->parent = rad;
+  if (rad->parent == NULL) {
+    centr->parent = NULL;
+    // root=centr;
+  } else {
+    if (rad->parent->left == rad) {
+      rad->parent->left = centr;
+    } else {
+      rad->parent->right = centr;
+    }
+    centr->parent = rad->parent;
+  }
+  centr->right = rad;
+  rad->parent = centr;
+}
+void rotate_left(Tree_rb_t *root, Tree_rb_t *data) {
+  Tree_rb_t *centr = data;
   if (centr == NULL || centr->right == NULL) return;
   Tree_rb_t *rad = centr->right;
-  if (rad->left != NULL) {
-    centr->right = rad->left;
-    centr->right->parant = centr;
-  }
-  if (centr->parant == NULL) {
-    rad->parant = NULL;
+  //  if (rad->left != NULL) {
+  centr->right = rad->left;
+  if (centr->right != NULL) centr->right->parent = centr;
+  //}
+  if (centr->parent == NULL) {
+    // root=rad;
+    rad->parent = NULL;
   } else {
-    if (centr->parant->left == centr)
-      centr->parant->left = rad;
+    if (centr->parent->left == centr)
+      centr->parent->left = rad;
     else
-      centr->parant->right = rad;
-    rad->parant = centr->parant;
+      centr->parent->right = rad;
+    rad->parent = centr->parent;
   }
-  rad->left=centr;
-  centr->parant=rad;
+  rad->left = centr;
+  centr->parent = rad;
+}
+
+void rb_insert(Tree_rb_t **root, int data) {
+  Tree_rb_t *p_tmp = *root;
+  Tree_rb_t *new_list = malloc(sizeof(Tree_rb_t));
+  while (p_tmp != NULL) {
+    if (p_tmp->key <= data) {
+      if (p_tmp->right == NULL) {
+        p_tmp->right = new_list;
+        new_list->parent = p_tmp;
+        break;
+      }
+      p_tmp = p_tmp->right;
+    } else {
+      if (p_tmp->left == NULL) {
+        p_tmp->left = new_list;
+        new_list->parent = p_tmp;
+        break;
+      }
+      p_tmp = p_tmp->left;
+    }
+  }
+  new_list->key = data;
+  new_list->right = NULL;
+  new_list->left = NULL;
+  new_list->color = RED;
+  rb_insert_fix(root, new_list);
+}
+void rb_insert_fix(Tree_rb_t **root, Tree_rb_t *p_data) {
+  while (p_data->parent->color == RED) {
+    if (p_data->parent->parent->left == p_data->parent) {
+      Tree_rb_t *uncle = p_data->parent->parent->right;
+      if (uncle != NULL && uncle->color == RED) {
+        uncle->color = BLACK;
+        p_data->parent = BLACK;
+        p_data->parent->parent = RED;
+        p_data = p_data->parent->parent;
+      } else {
+        if (p_data->parent->right == p_data) {
+          p_data = p_data->parent;
+          rotate_left(*root, p_data);
+        }
+        p_data->parent->color = BLACK;
+        p_data->parent->parent->color = RED;
+        rotate_right(*root, p_data->parent->parent);
+      }
+    } else {
+      Tree_rb_t *uncle = p_data->parent->parent->left;
+    }
+  }
 }
