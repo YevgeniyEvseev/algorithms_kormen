@@ -3,6 +3,7 @@
 
 #define RED 5
 #define BLACK 6
+#define WIDTH_WIN 80
 
 typedef struct Node_t {
   int color;
@@ -13,9 +14,13 @@ typedef struct Node_t {
 } Tree_rb_t;
 
 void new_tree(Tree_rb_t **root, int data);
-void rotate_right(Tree_rb_t *root, Tree_rb_t *data);
-void rotate_left(Tree_rb_t *root, Tree_rb_t *data);
+void rotate_right(Tree_rb_t **root, Tree_rb_t *data);
+void rotate_left(Tree_rb_t **root, Tree_rb_t *data);
 void rb_insert(Tree_rb_t **root, int data);
 void rb_insert_fix(Tree_rb_t **root, Tree_rb_t *p_data);
+Tree_rb_t *min_tree(Tree_rb_t *root);
+Tree_rb_t *tree_successor(Tree_rb_t *root, Tree_rb_t *p_data);
+
+void print_tree_rb(Tree_rb_t *root);
 
 #endif
