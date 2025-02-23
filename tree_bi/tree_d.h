@@ -19,11 +19,11 @@ typedef struct tree_d {
 void new_tree(tree_d **root, int data);
 void insert(tree_d **root, int data);
 void clear(tree_d *root);
-void drop(tree_d **root, int data);
+void tree_delete(tree_d **root, tree_d *ptr);
 void print_hightless(tree_d *root, int *array);
 void print_hightless_req(tree_d *root, int *array);
 tree_d *search_d(tree_d *root, int key);
-int min_tree(tree_d *root);
-int max_tree(tree_d *root);
+tree_d *min_tree(tree_d *root);
+tree_d *max_tree(tree_d *root);
 
 #endif

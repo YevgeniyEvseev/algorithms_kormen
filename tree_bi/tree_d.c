@@ -42,7 +42,8 @@ void clear(tree_d *root) {
   if (root->right) clear(root->right);
   free(root);
 }
-void drop(tree_d **root, int data) {
+void tree_delete(tree_d **root, tree_d *ptr) {
+#if 0
   tree_d *p_key = search_d(*root, data);
   tree_d *p_tmp = p_key;
   if (p_key == NULL) return;
@@ -128,6 +129,7 @@ void drop(tree_d **root, int data) {
     p_tmp->left->parent = min;
     free(p_key);
   }
+#endif
 }
 void print_hightless_req(tree_d *root, int *array) {
   tree_d *tmp = root;
@@ -178,17 +180,27 @@ tree_d *search_d(tree_d *root, int key) {
   }
   return root;
 }
-int min_tree(tree_d *root) {
+tree_d *min_tree(tree_d *root) {
   tree_d *p_tmp = root;
   while (p_tmp->left != NULL) {
     p_tmp = p_tmp->left;
   }
-  return p_tmp->data;
+  return p_tmp;
 }
-int max_tree(tree_d *root) {
+tree_d *max_tree(tree_d *root) {
   tree_d *p_tmp = root;
   while (p_tmp->right != NULL) {
     p_tmp = p_tmp->right;
   }
-  return p_tmp->data;
+  return p_tmp;
+}
+
+tree_d *tree_successory(tree_d *root, tree_d *ptr) {
+  if (ptr->right != NULL) {
+    return min_tree(ptr->right);
+  }
+  while (ptr != NULL && ptr->parent->right == ptr) {
+    ptr = ptr->parent;
+  }
+  return ptr;
 }

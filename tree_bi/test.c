@@ -80,7 +80,7 @@ START_TEST(DROP_child) {
   for (int i = 1; i < 17; ++i) {
     insert(&root, tmp[i]);
   }
-  drop(&root, -21);
+  tree_delete(&root, search_d(root, -21));
   ck_assert_int_ne(-21, min_tree(root));
   clear(root);
 }
@@ -95,7 +95,7 @@ START_TEST(DROP_node_right_child1) {
   }
   tree_d *node = search_d(root, 41);
   node = node->parent;
-  drop(&root, 41);
+  tree_delete(&root, search_d(root, 41));
   ck_assert_int_eq(44, node->left->data);
   clear(root);
 }
@@ -110,7 +110,7 @@ START_TEST(DROP_node_right_child2) {
   }
   tree_d *node = search_d(root, 22);
   node = node->parent;
-  drop(&root, 22);
+  tree_delete(&root, search_d(root, 22));
   ck_assert_int_eq(23, node->right->data);
   clear(root);
 }
@@ -126,7 +126,7 @@ START_TEST(DROP_node_left_child1) {
   insert(&root, 9);
   tree_d *node = search_d(root, 8);
   node = node->parent;
-  drop(&root, 8);
+  tree_delete(&root, search_d(root, 8));
   ck_assert_int_eq(9, node->right->data);
   clear(root);
 }
@@ -141,7 +141,7 @@ START_TEST(DROP_node_left_child2) {
   }
   tree_d *node = search_d(root, 45);
   node = node->parent;
-  drop(&root, 45);
+  tree_delete(&root, search_d(root, 45));
   ck_assert_int_eq(41, node->left->data);
   clear(root);
 }
@@ -156,7 +156,7 @@ START_TEST(DROP_node1) {
   }
   tree_d *node = search_d(root, 4);
   node = node->parent;
-  drop(&root, 4);
+  tree_delete(&root, search_d(root, 4));
   ck_assert_int_eq(4, node->left->data);
   clear(root);
 }
@@ -171,7 +171,7 @@ START_TEST(DROP_node2) {
   }
   tree_d *node = search_d(root, 56);
   node = node->parent;
-  drop(&root, 56);
+  tree_delete(&root, search_d(root, 56));
   ck_assert_int_eq(75, node->right->data);
   clear(root);
 }
@@ -184,7 +184,7 @@ START_TEST(DROP_root1) {
   for (int i = 1; i < 17; ++i) {
     insert(&root, tmp[i]);
   }
-  drop(&root, 34);
+  tree_delete(&root, search_d(root, 34));
   ck_assert_int_eq(41, root->data);
   clear(root);
 }
@@ -193,7 +193,7 @@ END_TEST
 START_TEST(DROP_root2) {
   tree_d *root;
   new_tree(&root, 5);
-  drop(&root, root->data);
+  tree_delete(&root, root);
   ck_assert_ptr_null(root);
 }
 END_TEST
@@ -202,7 +202,7 @@ START_TEST(DROP_root3) {
   tree_d *root;
   new_tree(&root, 5);
   insert(&root, 10);
-  drop(&root, root->data);
+  tree_delete(&root, root);
   ck_assert_int_eq(10, root->data);
 }
 END_TEST
@@ -211,7 +211,7 @@ START_TEST(DROP_root4) {
   tree_d *root;
   new_tree(&root, 5);
   insert(&root, 2);
-  drop(&root, root->data);
+  tree_delete(&root, root);
   ck_assert_int_eq(2, root->data);
 }
 END_TEST
