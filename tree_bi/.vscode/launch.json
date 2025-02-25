@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/dotharer/Documents/learn/cormen/tree_bi",
-      "program": "/home/dotharer/Documents/learn/cormen/tree_bi/tree",
+      "cwd": "/home/dotharer/Documents/learn/cormen/algorithms_kormen/tree_bi",
+      "program": "/home/dotharer/Documents/learn/cormen/algorithms_kormen/tree_bi/tree",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -34,8 +34,26 @@ int main() {
 
   clear(root);
 #endif
+#if 0
+  int tmp[17] = {34, 12, 4, 56, 2, 22, 23, -9, 0, 4, 1, 8, 45, 41, -21, 44, 75};
 
-  tree_d *root = NULL;
-
-  drop(&root, root->data);
+  tree_d *root;
+  new_tree(&root, *tmp);
+  for (int i = 1; i < 17; ++i) {
+    insert(&root, tmp[i]);
+  }
+  tree_d *ptr_tree = search_d(root, 2);
+  tree_d *succes = tree_successory(ptr_tree);
+  printf("%d", (succes == NULL) ? 0 : succes->data);
+#endif
+  int tmp[17] = {34, 12, 4, 56, 2, 22, 23, -9, 0, 4, 1, 8, 45, 41, -21, 44, 75};
+  tree_d *root;
+  new_tree(&root, *tmp);
+  for (int i = 1; i < 17; ++i) {
+    insert(&root, tmp[i]);
+  }
+  for (int i = 1; i < 17; ++i) {
+    tree_delete(&root, search_d(root, tmp[i]));
+  }
+  tree_delete(&root, root);
 }

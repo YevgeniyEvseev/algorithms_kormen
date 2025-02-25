@@ -81,7 +81,7 @@ START_TEST(DROP_child) {
     insert(&root, tmp[i]);
   }
   tree_delete(&root, search_d(root, -21));
-  ck_assert_int_ne(-21, min_tree(root));
+  ck_assert_int_ne(-21, min_tree(root)->data);
   clear(root);
 }
 END_TEST
@@ -190,6 +190,21 @@ START_TEST(DROP_root1) {
 }
 END_TEST
 
+START_TEST(DROP_all) {
+  int tmp[17] = {34, 12, 4, 56, 2, 22, 23, -9, 0, 4, 1, 8, 45, 41, -21, 44, 75};
+  tree_d *root;
+  new_tree(&root, *tmp);
+  for (int i = 1; i < 17; ++i) {
+    insert(&root, tmp[i]);
+  }
+  for (int i = 1; i < 17; ++i) {
+    tree_delete(&root, search_d(root, tmp[i]));
+  }
+  tree_delete(&root, root);
+  ck_assert_ptr_null(root);
+}
+END_TEST
+
 START_TEST(DROP_root2) {
   tree_d *root;
   new_tree(&root, 5);
@@ -240,6 +255,18 @@ START_TEST(DROP_search2) {
 }
 END_TEST
 
+START_TEST(Tree_succossory1) {
+  int tmp[11] = {15, 6, 18, 3, 7, 17, 20, 2, 4, 13, 9};
+  tree_d *root;
+  new_tree(&root, *tmp);
+  for (int i = 1; i < 11; ++i) {
+    insert(&root, tmp[i]);
+  }
+  tree_d *res = tree_successory(search_d(root, 13));
+  ck_assert_int_eq(root->data, res->data);
+}
+END_TEST
+
 Suite *tree_d_suite() {
   Suite *s;
   TCase *tc_core;
@@ -265,6 +292,8 @@ Suite *tree_d_suite() {
   tcase_add_test(tc_core, DROP_root4);
   tcase_add_test(tc_core, DROP_search);
   tcase_add_test(tc_core, DROP_search2);
+  tcase_add_test(tc_core, DROP_all);
+  tcase_add_test(tc_core, Tree_succossory1);
   suite_add_tcase(s, tc_core);
   return s;
 }

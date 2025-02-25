@@ -25,5 +25,6 @@ void print_hightless_req(tree_d *root, int *array);
 tree_d *search_d(tree_d *root, int key);
 tree_d *min_tree(tree_d *root);
 tree_d *max_tree(tree_d *root);
+tree_d *tree_successory(tree_d *ptr);
 
 #endif
