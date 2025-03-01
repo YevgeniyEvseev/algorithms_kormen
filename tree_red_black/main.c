@@ -4,10 +4,9 @@
 
 int main() {
   Tree_rb_t *root = NULL;
-  new_tree(&root, 5);
-  rb_insert(&root, 7);
-  rb_insert(&root, 6);
-  rb_insert(&root, 11);
-
-  printf("%d\n", root->key);
+  new_tree(&root, 17);
+  for (int i = 16; i >= 0; --i) {
+    rb_insert(&root, i);
+  }
+  print_tree_rb(&root, root);
 }

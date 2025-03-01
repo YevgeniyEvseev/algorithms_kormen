@@ -1,12 +1,15 @@
 #include "rb_tree.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 
 void new_tree(Tree_rb_t **root, int data) {
   Tree_rb_t *tmp = malloc(sizeof(Tree_rb_t));
-  tmp->parent = NULL;
-  tmp->left = NULL;
-  tmp->right = NULL;
+  Tree_rb_t *nil = malloc(sizeof(Tree_rb_t));
+  nil->color = BLACK;
+  tmp->parent = nil;
+  tmp->left = nil;
+  tmp->right = nil;
   tmp->key = data;
   tmp->color = BLACK;
   *root = tmp;
@@ -27,11 +30,11 @@ Tree_rb_t *search_d(Tree_rb_t *root, int data) {
 void rotate_right(Tree_rb_t **root, Tree_rb_t *data) {
   Tree_rb_t *centr = data;
   Tree_rb_t *rad = centr->parent;
-  if (rad == NULL) return;
+  if (rad == NIL) return;
   rad->left = centr->right;
-  if (rad->left != NULL) rad->left->parent = rad;
-  if (rad->parent == NULL) {
-    centr->parent = NULL;
+  if (rad->left != NIL) rad->left->parent = rad;
+  if (rad->parent == NIL) {
+    centr->parent = NIL;
     *root = centr;
   } else {
     if (rad->parent->left == rad) {
@@ -46,15 +49,16 @@ void rotate_right(Tree_rb_t **root, Tree_rb_t *data) {
 }
 void rotate_left(Tree_rb_t **root, Tree_rb_t *data) {
   Tree_rb_t *centr = data;
-  if (centr == NULL || centr->right == NULL) return;
+  Tree_rb_t *nil = NIL;
+  if (centr == NULL || centr->right == NIL) return;
   Tree_rb_t *rad = centr->right;
   //  if (rad->left != NULL) {
   centr->right = rad->left;
-  if (centr->right != NULL) centr->right->parent = centr;
+  if (centr->right != NIL) centr->right->parent = centr;
   //}
-  if (centr->parent == NULL) {
+  if (centr->parent == NIL) {
     *root = rad;
-    rad->parent = NULL;
+    rad->parent = nil;
   } else {
     if (centr->parent->left == centr)
       centr->parent->left = rad;
@@ -69,16 +73,16 @@ void rotate_left(Tree_rb_t **root, Tree_rb_t *data) {
 void rb_insert(Tree_rb_t **root, int data) {
   Tree_rb_t *p_tmp = *root;
   Tree_rb_t *new_list = malloc(sizeof(Tree_rb_t));
-  while (p_tmp != NULL) {
+  while (p_tmp != NIL) {
     if (p_tmp->key <= data) {
-      if (p_tmp->right == NULL) {
+      if (p_tmp->right == NIL) {
         p_tmp->right = new_list;
         new_list->parent = p_tmp;
         break;
       }
       p_tmp = p_tmp->right;
     } else {
-      if (p_tmp->left == NULL) {
+      if (p_tmp->left == NIL) {
         p_tmp->left = new_list;
         new_list->parent = p_tmp;
         break;
@@ -87,8 +91,8 @@ void rb_insert(Tree_rb_t **root, int data) {
     }
   }
   new_list->key = data;
-  new_list->right = NULL;
-  new_list->left = NULL;
+  new_list->right = NIL;
+  new_list->left = NIL;
   new_list->color = RED;
   rb_insert_fix(root, new_list);
 }
@@ -96,11 +100,11 @@ void rb_insert_fix(Tree_rb_t **root, Tree_rb_t *p_data) {
   while (p_data->parent->color == RED) {
     if (p_data->parent->parent->left == p_data->parent) {
       Tree_rb_t *uncle = p_data->parent->parent->right;
-      if (uncle != NULL && uncle->color == RED) {
+      if (uncle->color == RED) {
         uncle->color = BLACK;
         p_data->parent->color = BLACK;
         p_data->parent->parent->color = RED;
-        if (p_data->parent->parent == *root) break;
+        // if (p_data->parent->parent == *root) break;
         p_data = p_data->parent->parent;
       } else {                                  // uncle is null or black
         if (p_data->parent->right == p_data) {  // p_data is right
@@ -113,11 +117,11 @@ void rb_insert_fix(Tree_rb_t **root, Tree_rb_t *p_data) {
       }
     } else {
       Tree_rb_t *uncle = p_data->parent->parent->left;
-      if (uncle != NULL && uncle->color == RED) {
+      if (uncle->color == RED) {
         uncle->color = BLACK;
         p_data->parent->color = BLACK;
         p_data->parent->parent->color = RED;
-        if (p_data->parent->parent == *root) break;
+        //  if (p_data->parent->parent == *root) break;
         p_data = p_data->parent->parent;
       } else {                                 // uncle is null or black
         if (p_data->parent->left == p_data) {  // p_data is left
@@ -133,21 +137,26 @@ void rb_insert_fix(Tree_rb_t **root, Tree_rb_t *p_data) {
   (*root)->color = BLACK;
 }
 
-Tree_rb_t *min_tree(Tree_rb_t *root) {
-  Tree_rb_t *min = root;
-  while (min->left != NULL) {
+Tree_rb_t *min_tree(Tree_rb_t *root, Tree_rb_t *p_data) {
+  Tree_rb_t *min = p_data;
+  while (min->left != NILl) {
     min = min->left;
   }
   return min;
 }
 Tree_rb_t *tree_successor(Tree_rb_t *root, Tree_rb_t *p_data) {
-  if (p_data->right != NULL) return min_tree(p_data->right);
+  if (p_data->right != NILl) return min_tree(root, p_data->right);
   Tree_rb_t *parent = p_data->parent;
-  while (parent != NULL && parent->right == p_data) {
+  while (parent != NILl && parent->right == p_data) {
     p_data = parent;
     parent = p_data->parent;
   }
   return p_data;
 }
 
-void print_tree_rb(Tree_rb_t *root) { int level = 0; }
+void print_tree_rb(Tree_rb_t **root, Tree_rb_t *p_data) {
+  // static int l_level = 0, r_level = 0;
+  printf("%d ", p_data->key);
+  if (p_data != NIL) print_tree_rb(root, p_data->left);
+  if (p_data != NIL) print_tree_rb(root, p_data->right);
+}
