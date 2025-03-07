@@ -22,7 +22,9 @@ void rb_insert(Tree_rb_t **root, int data);
 void rb_insert_fix(Tree_rb_t **root, Tree_rb_t *p_data);
 Tree_rb_t *min_tree(Tree_rb_t *root, Tree_rb_t *p_data);
 Tree_rb_t *tree_successor(Tree_rb_t *root, Tree_rb_t *p_data);
+void delete_tree_rb(Tree_rb_t **root, Tree_rb_t *p_data);
+void rb_del_fix(Tree_rb_t *p_data);
 
-void print_tree_rb(Tree_rb_t **root, Tree_rb_t *p_data);
+    void print_tree_rb(Tree_rb_t **root, Tree_rb_t *p_data);
 
 #endif

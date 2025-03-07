@@ -160,3 +160,45 @@ void print_tree_rb(Tree_rb_t **root, Tree_rb_t *p_data) {
   if (p_data != NIL) print_tree_rb(root, p_data->left);
   if (p_data != NIL) print_tree_rb(root, p_data->right);
 }
+
+void delete_tree_rb(Tree_rb_t **root, Tree_rb_t *ptr) {
+  Tree_rb_t *tmp = NULL;
+  Tree_rb_t *child = NULL;
+  if (ptr->left == NIL || ptr->right == NIL)
+    tmp = ptr;
+  else
+    tmp = tree_successory(ptr);
+
+  if (tmp->left != NULL)
+    child = tmp->left;
+  else
+    child = tmp->right;
+
+  child->parent = tmp->parent;
+  if (tmp->parent == NULL)
+    *root = child;
+  else {
+    if (tmp->parent->left == tmp)
+      tmp->parent->left = child;
+    else
+      tmp->parent->right = child;
+  }
+  if (tmp != ptr) ptr->key = tmp->key;
+  if (tmp->color == BLACK) rb_del_fix(root, child);
+  free(tmp);
+}
+void rb_del_fix(Tree_rb_t **root, Tree_rb_t *p_data) {
+  Tree_rb_t *brother = NULL;
+  while (p_data != *root && p_data->color == BLACK) {
+    if (p_data == p_data->parent->left) {
+      Tree_rb_t *brother = p_data->parent->right;
+      if(brother->color==RED){
+        brother->color=BLACK;
+        p_data->parent->color=RED;
+        rotate_left(root,p_data);
+      }
+    } else {
+      // delete right Node
+    }
+  }
+}
